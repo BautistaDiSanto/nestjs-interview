@@ -1,6 +1,11 @@
+import { IsInt, IsString, IsBoolean } from 'class-validator';
+
 export class CreateTodoItemDto {
-  id: number;
+
+  @IsInt()
   listId: number;
+
+  @IsString()
   description: string;
-  isCompleted: boolean;
+
 }

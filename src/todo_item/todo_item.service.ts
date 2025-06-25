@@ -24,7 +24,7 @@ export class TodoItemService {
       id: this.nextId(),
       listId: dto.listId,
       description: dto.description,
-      isCompleted: dto.isCompleted,
+      isCompleted: false,
     };
 
     this.todolists.push(todoList);
@@ -34,11 +34,14 @@ export class TodoItemService {
 
   update(id: number, dto: UpdateTodoItemDto): TodoItem {
     const todolist = this.todolists.find((x) => x.id == Number(id));
-
-    // Update the record
-    todolist.description = dto.description;
-
-    return todolist;
+    if (!todolist) {
+      throw new Error(`Todo item with id ${id} not found`);
+    } else {
+      // Update the record
+      todolist.description = dto.description;
+  
+      return todolist;
+    }
   }
 
   delete(id: number): void {
@@ -47,6 +50,14 @@ export class TodoItemService {
     if (index > -1) {
       this.todolists.splice(index, 1);
     }
+  }
+
+  toggleCompleted(id: number): TodoItem {
+    const todoItem = this.todolists.find((x) => x.id === Number(id));
+    if (todoItem) {
+      todoItem.isCompleted = !todoItem.isCompleted;
+    }
+    return todoItem;
   }
 
   private nextId(): number {

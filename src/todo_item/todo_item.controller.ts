@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateTodoItemDto } from './dtos/create-todo_item';
 import { UpdateTodoItemDto } from './dtos/update-todo_item';
@@ -38,8 +39,12 @@ export class TodoItemController {
     @Param('itemId') itemId: number,
     @Body() dto: UpdateTodoItemDto,
   ): TodoItem {
-    console.log('update list item', itemId, dto);
-    return this.todoListsService.update(itemId, dto);
+    console.log('CONTROLLER', itemId, dto);
+    try {
+      return this.todoListsService.update(itemId, dto);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @Delete('/:itemId')
@@ -47,4 +52,8 @@ export class TodoItemController {
     this.todoListsService.delete(itemId);
   }
   
+  @Put('/complete/:itemId')
+  toggleCompleted(@Param('itemId') itemId: number): TodoItem {
+    return this.todoListsService.toggleCompleted(itemId);
+  }
 }
