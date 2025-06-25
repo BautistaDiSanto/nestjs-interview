@@ -15,23 +15,22 @@ import { TodoItemService } from './todo_item.service';
 
 @Controller('api/todoItem')
 export class TodoItemController {
-  constructor(private todoListsService: TodoItemService) {}
+  constructor(private todoItemService: TodoItemService) {}
 
   @Get()
   index(): TodoItem[] {
-    return this.todoListsService.all();
+    return this.todoItemService.all();
   }
 
   @Get('/:itemId')
   show(@Param('itemId') itemId: number): TodoItem {
     
-    return this.todoListsService.get(itemId);
+    return this.todoItemService.get(itemId);
   }
 
   @Post('/:listId')
   create(@Body() dto: CreateTodoItemDto): TodoItem {
-    console.log('create list item');
-    return this.todoListsService.create(dto);
+    return this.todoItemService.create(dto);
   }
 
   @Put('/:itemId')
@@ -39,9 +38,8 @@ export class TodoItemController {
     @Param('itemId') itemId: number,
     @Body() dto: UpdateTodoItemDto,
   ): TodoItem {
-    console.log('CONTROLLER', itemId, dto);
     try {
-      return this.todoListsService.update(itemId, dto);
+      return this.todoItemService.update(itemId, dto);
     } catch (error) {
       throw new NotFoundException(error.message);
     }
@@ -49,11 +47,11 @@ export class TodoItemController {
 
   @Delete('/:itemId')
   delete(@Param('itemId') itemId: number,): void {
-    this.todoListsService.delete(itemId);
+    this.todoItemService.delete(itemId);
   }
   
   @Put('/complete/:itemId')
   toggleCompleted(@Param('itemId') itemId: number): TodoItem {
-    return this.todoListsService.toggleCompleted(itemId);
+    return this.todoItemService.toggleCompleted(itemId);
   }
 }

@@ -5,18 +5,18 @@ import { TodoItem } from '../interfaces/todo_item.interface';
 
 @Injectable()
 export class TodoItemService {
-  private readonly todolists: TodoItem[];
+  private readonly todoItem: TodoItem[];
 
-  constructor(todoLists: TodoItem[] = []) {
-    this.todolists = todoLists;
+  constructor(todoItem: TodoItem[] = []) {
+    this.todoItem = todoItem;
   }
 
   all(): TodoItem[] {
-    return this.todolists;
+    return this.todoItem;
   }
 
   get(id: number): TodoItem {
-    return this.todolists.find((x) => x.id === Number(id));
+    return this.todoItem.find((x) => x.id === Number(id));
   }
 
   create(dto: CreateTodoItemDto): TodoItem {
@@ -27,13 +27,13 @@ export class TodoItemService {
       isCompleted: false,
     };
 
-    this.todolists.push(todoList);
+    this.todoItem.push(todoList);
 
     return todoList;
   }
 
   update(id: number, dto: UpdateTodoItemDto): TodoItem {
-    const todolist = this.todolists.find((x) => x.id == Number(id));
+    const todolist = this.todoItem.find((x) => x.id == Number(id));
     if (!todolist) {
       throw new Error(`Todo item with id ${id} not found`);
     } else {
@@ -45,15 +45,15 @@ export class TodoItemService {
   }
 
   delete(id: number): void {
-    const index = this.todolists.findIndex((x) => x.id == Number(id));
+    const index = this.todoItem.findIndex((x) => x.id == Number(id));
 
     if (index > -1) {
-      this.todolists.splice(index, 1);
+      this.todoItem.splice(index, 1);
     }
   }
 
   toggleCompleted(id: number): TodoItem {
-    const todoItem = this.todolists.find((x) => x.id === Number(id));
+    const todoItem = this.todoItem.find((x) => x.id === Number(id));
     if (todoItem) {
       todoItem.isCompleted = !todoItem.isCompleted;
     }
@@ -61,7 +61,7 @@ export class TodoItemService {
   }
 
   private nextId(): number {
-    const last = this.todolists
+    const last = this.todoItem
       .map((x) => x.id)
       .sort()
       .reverse()[0];
