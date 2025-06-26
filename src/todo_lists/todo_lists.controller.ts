@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateTodoListDto } from './dtos/create-todo_list';
 import { UpdateTodoListDto } from './dtos/update-todo_list';
@@ -18,17 +19,29 @@ export class TodoListsController {
 
   @Get()
   index(): TodoList[] {
-    return this.todoListsService.all();
+    try {
+      return this.todoListsService.all();
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @Get('/:todoListId')
   show(@Param() param: { todoListId: number }): TodoList {
-    return this.todoListsService.get(param.todoListId);
+    try {
+      return this.todoListsService.get(param.todoListId);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @Post()
   create(@Body() dto: CreateTodoListDto): TodoList {
-    return this.todoListsService.create(dto);
+    try {
+      return this.todoListsService.create(dto);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @Put('/:todoListId')
@@ -36,12 +49,20 @@ export class TodoListsController {
     @Param() param: { todoListId: number },
     @Body() dto: UpdateTodoListDto,
   ): TodoList {
-    return this.todoListsService.update(param.todoListId, dto);
+    try {
+      return this.todoListsService.update(param.todoListId, dto);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @Delete('/:todoListId')
   delete(@Param() param: { todoListId: number }): void {
-    this.todoListsService.delete(param.todoListId);
+    try {
+      this.todoListsService.delete(param.todoListId);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
   
 }

@@ -16,7 +16,11 @@ export class TodoListsService {
   }
 
   get(id: number): TodoList {
-    return this.todolists.find((x) => x.id === Number(id));
+    let list = this.todolists.find((x) => x.id === Number(id));
+    if (!list) {
+      throw new Error(`Todo list with id ${id} not found`);
+    }
+    return list
   }
 
   create(dto: CreateTodoListDto): TodoList {
@@ -33,6 +37,9 @@ export class TodoListsService {
   update(id: number, dto: UpdateTodoListDto): TodoList {
     const todolist = this.todolists.find((x) => x.id == Number(id));
 
+    if (!todolist) {
+      throw new Error(`Todo list with id ${id} not found`);
+    }
     // Update the record
     todolist.name = dto.name;
 
@@ -41,6 +48,10 @@ export class TodoListsService {
 
   delete(id: number): void {
     const index = this.todolists.findIndex((x) => x.id == Number(id));
+
+    if (index === -1) {
+      throw new Error(`Todo list with id ${id} not found`);
+    }
 
     if (index > -1) {
       this.todolists.splice(index, 1);

@@ -19,18 +19,29 @@ export class TodoItemController {
 
   @Get()
   index(): TodoItem[] {
-    return this.todoItemService.all();
+    try {
+      return this.todoItemService.all();
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @Get('/:itemId')
   show(@Param('itemId') itemId: number): TodoItem {
-    
-    return this.todoItemService.get(itemId);
+    try {
+      return this.todoItemService.get(itemId);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
-  @Post('/:listId')
+  @Post('')
   create(@Body() dto: CreateTodoItemDto): TodoItem {
-    return this.todoItemService.create(dto);
+    try {
+      return this.todoItemService.create(dto);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @Put('/:itemId')
@@ -47,11 +58,19 @@ export class TodoItemController {
 
   @Delete('/:itemId')
   delete(@Param('itemId') itemId: number,): void {
-    this.todoItemService.delete(itemId);
+    try {
+      this.todoItemService.delete(itemId);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
   
   @Put('/complete/:itemId')
   toggleCompleted(@Param('itemId') itemId: number): TodoItem {
-    return this.todoItemService.toggleCompleted(itemId);
+    try {
+      return this.todoItemService.toggleCompleted(itemId);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 }
