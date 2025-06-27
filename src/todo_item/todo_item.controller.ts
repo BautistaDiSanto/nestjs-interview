@@ -4,9 +4,9 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
-  NotFoundException,
 } from '@nestjs/common';
 import { CreateTodoItemDto } from './dtos/create-todo_item';
 import { UpdateTodoItemDto } from './dtos/update-todo_item';
@@ -19,58 +19,34 @@ export class TodoItemController {
 
   @Get()
   index(): TodoItem[] {
-    try {
-      return this.todoItemService.all();
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+    return this.todoItemService.all();
   }
 
   @Get('/:itemId')
-  show(@Param('itemId') itemId: number): TodoItem {
-    try {
-      return this.todoItemService.get(itemId);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+  show(@Param('itemId', ParseIntPipe) itemId: number): TodoItem {
+    return this.todoItemService.get(itemId);
   }
 
   @Post('')
   create(@Body() dto: CreateTodoItemDto): TodoItem {
-    try {
-      return this.todoItemService.create(dto);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+    return this.todoItemService.create(dto);
   }
 
   @Put('/:itemId')
   update(
-    @Param('itemId') itemId: number,
+    @Param('itemId', ParseIntPipe) itemId: number,
     @Body() dto: UpdateTodoItemDto,
   ): TodoItem {
-    try {
-      return this.todoItemService.update(itemId, dto);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+    return this.todoItemService.update(itemId, dto);
   }
 
   @Delete('/:itemId')
-  delete(@Param('itemId') itemId: number,): void {
-    try {
-      this.todoItemService.delete(itemId);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+  delete(@Param('itemId', ParseIntPipe) itemId: number): void {
+    this.todoItemService.delete(itemId);
   }
   
   @Put('/complete/:itemId')
-  toggleCompleted(@Param('itemId') itemId: number): TodoItem {
-    try {
-      return this.todoItemService.toggleCompleted(itemId);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+  toggleCompleted(@Param('itemId', ParseIntPipe) itemId: number): TodoItem {
+    return this.todoItemService.toggleCompleted(itemId);
   }
 }

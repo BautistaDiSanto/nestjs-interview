@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTodoItemDto } from './dtos/create-todo_item';
 import { UpdateTodoItemDto } from './dtos/update-todo_item';
 import { TodoItem } from '../interfaces/todo_item.interface';
@@ -35,7 +35,7 @@ export class TodoItemService {
   update(id: number, dto: UpdateTodoItemDto): TodoItem {
     const todolist = this.todoItem.find((x) => x.id == Number(id));
     if (!todolist) {
-      throw new Error(`Todo item with id ${id} not found`);
+      throw new NotFoundException(`Todo item with id ${id} not found`);
     } else {
       // Update the record
       todolist.description = dto.description;
@@ -46,6 +46,9 @@ export class TodoItemService {
 
   delete(id: number): void {
     const index = this.todoItem.findIndex((x) => x.id == Number(id));
+    if (index === -1) {
+      throw new NotFoundException(`Todo item with id ${id} not found`);
+    }
 
     if (index > -1) {
       this.todoItem.splice(index, 1);

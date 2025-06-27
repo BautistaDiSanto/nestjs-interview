@@ -117,16 +117,16 @@ describe('TodoItemController', () => {
         { id: 2, listId: 1, description: 'item2', isCompleted: true },
       ]);
     });
-    it('should do nothing if the item does not exist', () => {
-      todoItemController.delete(999);
+    it('should throw 404 if the item does not exist', () => {
+      expect(() => todoItemController.delete(999)).toThrowError('Todo item with id 999 not found');
       expect(todoItemService.all()).toEqual([
         { id: 1, listId: 1, description: 'item1', isCompleted: false },
         { id: 2, listId: 1, description: 'item2', isCompleted: true },
       ]);
     });
-    it('should do nothing if the id is not a number', () => {
+    it('should throw 404 if the id is not a number', () => {
       // @ts-expect-error: purposely passing invalid type
-      todoItemController.delete('abc');
+      expect(() => todoItemController.delete('abc')).toThrowError('Todo item with id abc not found');
       expect(todoItemService.all()).toEqual([
         { id: 1, listId: 1, description: 'item1', isCompleted: false },
         { id: 2, listId: 1, description: 'item2', isCompleted: true },
